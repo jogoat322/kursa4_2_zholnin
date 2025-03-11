@@ -5,9 +5,9 @@ import java.util.Random;
 import igame.IComputer;
 
 public class Computer implements IComputer {
-    private Board myBoard;
-    private Board opponentBoard;
-    private Random random;
+    private final Board myBoard;
+    private final Board opponentBoard;
+    private final Random random;
 
     public Computer(Board myBoard, Board opponentBoard) {
         this.myBoard = myBoard;

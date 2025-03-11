@@ -3,8 +3,8 @@ package game;
 import igame.IPlayer;
 
 public class Player implements IPlayer {
-    private Board myBoard;
-    private Board opponentBoard;
+    private final Board myBoard;
+    private final Board opponentBoard;
 
     public Player(Board myBoard, Board opponentBoard) {
         this.myBoard = myBoard;

@@ -5,9 +5,9 @@ import igame.IBoard;
 import java.util.Random;
 
 public class Board implements IBoard {
-    private int[][] grid;
+    private final int[][] grid;
     private static final int SIZE = 10;
-    private Random random;
+    private final Random random;
 
     public Board() {
         grid = new int[SIZE][SIZE];

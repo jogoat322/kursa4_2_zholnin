@@ -12,7 +12,7 @@ public class GameController implements IGameController {
     private Computer computer;
     private GameView gameView;
     private boolean isPlayerTurn = true; // Флаг для определения хода игрока
-    private int[] shipSizes = {4, 3, 3, 2, 2, 2, 1, 1, 1, 1}; // Размеры кораблей
+    private final int[] shipSizes = {4, 3, 3, 2, 2, 2, 1, 1, 1, 1}; // Размеры кораблей
     private int currentShipIndex = 0; // Индекс текущего корабля для размещения
 
 
@@ -115,11 +115,6 @@ public class GameController implements IGameController {
         alert.showAndWait();
     }
 
-    public boolean areAllPlayerShipsPlaced() {
-        return currentShipIndex >= shipSizes.length; // Все корабли размещены
-    }
-    public boolean isGameOver() {
-        return playerBoard.areAllShipsSunk() || computerBoard.areAllShipsSunk();
-    }
+
 
 }

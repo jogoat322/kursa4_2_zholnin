@@ -12,10 +12,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.paint.Color;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+
 
 public class GameView implements IGameView {
     private Stage primaryStage;
