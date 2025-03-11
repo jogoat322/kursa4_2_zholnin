@@ -71,13 +71,13 @@ public class GameController implements IGameController {
     public void handlePlayerMove(int x, int y) {
         // Проверяем, что все корабли размещены
         if (currentShipIndex < shipSizes.length) {
-            showError("Ошибка", "Сначала разместите все корабли!");
+            showError("Сначала разместите все корабли!");
             return;
         }
 
         if (isPlayerTurn) {
             if (computerBoard.isCellAttacked(x, y)) {
-                showError("Ошибка", "Вы уже стреляли в эту клетку!");
+                showError("Вы уже стреляли в эту клетку!");
                 return;
             }
 
@@ -107,9 +107,9 @@ public class GameController implements IGameController {
         }
     }
 
-    private void showError(String title, String message) {
+    private void showError(String message) {
         Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle(title);
+        alert.setTitle("Ошибка");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
