@@ -21,7 +21,7 @@ public class MainMenu implements IMainMenu {
     }
 
     public void show() {
-        File file = new File("C:\\Users\\Andrey\\Desktop\\3kurs\\sea_batl_30\\src\\main\\resources\\world-of-warships-1k7yh.jpg");
+        File file = new File("src/main/resources/world-of-warships-1k7yh.jpg");
         Image backgroundImage = new Image(file.toURI().toString());
         ImageView backgroundView = new ImageView(backgroundImage);
         backgroundView.setFitWidth(primaryStage.getWidth());
