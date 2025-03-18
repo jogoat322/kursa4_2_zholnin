@@ -16,17 +16,18 @@ import javafx.scene.input.KeyCode;
 
 
 public class GameView implements IGameView {
-    private Stage primaryStage;
-    private Player player;
-    private Computer computer;
-    private GameController gameController;
-    private GridPane playerGrid;
-    private GridPane computerGrid;
-    private Label playerLabel;
-    private Label computerLabel;
+    private final Stage primaryStage;
+    private final Player player;
+    private final Computer computer;
+    private final GameController gameController;
+    private final GridPane playerGrid;
+    private final GridPane computerGrid;
+    private final Label playerLabel;
+    private final Label computerLabel;
     private boolean isPlacingShips = false; // Флаг для режима расстановки кораблей
     private int currentShipSize = -1; // Размер текущего корабля для размещения
     private boolean isVertical = false; // Ориентация корабля
+
 
     public GameView(Stage primaryStage, Player player, Computer computer, GameController gameController) {
         this.primaryStage = primaryStage;
@@ -80,12 +81,7 @@ public class GameView implements IGameView {
         setupGridForShipPlacement(playerGrid);
     }
 
-    /**
-     * Завершает расстановку кораблей и начинает игру.
-     */
-    /**
-     * Завершает расстановку кораблей и начинает игру.
-     */
+
     public void startGame() {
         // Проверяем, что все корабли размещены
         if (gameController.getCurrentShipSize() != -1) {
@@ -130,12 +126,7 @@ public class GameView implements IGameView {
         return wrapper;
     }
 
-    /**
-     * Настраивает сетку для игрового поля.
-     */
-    /**
-     * Настраивает сетку для игрового поля.
-     */
+
     private void setupGrid(GridPane grid, int[][] board, boolean isClickable) {
         grid.setHgap(2);
         grid.setVgap(2);
@@ -243,12 +234,7 @@ public class GameView implements IGameView {
         }
     }
 
-    /**
-     * Очищает предварительный просмотр корабля на поле.
-     */
-    /**
-     * Очищает предварительный просмотр корабля на поле.
-     */
+
     private void clearPreview(GridPane grid) {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
@@ -291,12 +277,7 @@ public class GameView implements IGameView {
         }
     }
 
-    /**
-     * Обновляет стиль клетки в зависимости от её состояния.
-     */
-    /**
-     * Обновляет стиль клетки в зависимости от её состояния.
-     */
+
     private void updateCellStyle(Button cell, int cellState) {
         switch (cellState) {
             case 0: // Пустая клетка
