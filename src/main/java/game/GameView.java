@@ -16,19 +16,18 @@ import javafx.scene.input.KeyCode;
 
 public class GameView implements IGameView {
     private final Stage primaryStage;
-    private final Player player1;      // Первый игрок
-    private final Player player2;      // Второй игрок (для PvP)
-    private final Computer computer;   // Компьютер (для PvE)
+    private final Player player1;
+    private final Player player2;
+    private final Computer computer;
     private final GameController gameController;
-    private final GridPane player1Grid; // Поле первого игрока
-    private final GridPane player2Grid; // Поле второго игрока или компьютера
+    private final GridPane player1Grid;
+    private final GridPane player2Grid;
     private final Label player1Label;
     private final Label player2Label;
     private boolean isPlacingShips = false;
     private int currentShipSize = -1;
     private boolean isVertical = false;
 
-    // Конструктор для PvE
     public GameView(Stage primaryStage, Player player, Computer computer, GameController gameController) {
         this.primaryStage = primaryStage;
         this.player1 = player;
@@ -41,7 +40,6 @@ public class GameView implements IGameView {
         player2Label = new Label("Поле компьютера:");
     }
 
-    // Конструктор для PvP
     public GameView(Stage primaryStage, Player player1, Player player2, GameController gameController) {
         this.primaryStage = primaryStage;
         this.player1 = player1;
@@ -124,7 +122,11 @@ public class GameView implements IGameView {
             for (int j = 0; j < 10; j++) {
                 Button cell = (Button) player1Grid.getChildren().get(i * 10 + j);
                 int cellState = player1.getBoard().getGrid()[i][j];
-                updateCellStyle(cell, cellState);
+                if (gameController.isFirstPlayerPlacing() || !gameController.isPvPMode()) {
+                    updateCellStyle(cell, cellState); // Показываем корабли во время расстановки первого игрока или в PvE
+                } else {
+                    updateCellStyle(cell, cellState == 2 || cellState == 3 ? cellState : 0); // Скрываем корабли после расстановки
+                }
             }
         }
 
@@ -132,10 +134,12 @@ public class GameView implements IGameView {
             for (int j = 0; j < 10; j++) {
                 Button cell = (Button) player2Grid.getChildren().get(i * 10 + j);
                 int cellState = (player2 != null) ? player2.getBoard().getGrid()[i][j] : computer.getBoard().getGrid()[i][j];
-                if (!gameController.isPvPMode() && (cellState == 2 || cellState == 3)) {
-                    updateCellStyle(cell, cellState);
-                } else if (gameController.isPvPMode()) {
-                    updateCellStyle(cell, cellState);
+                if (gameController.isPvPMode() && gameController.isFirstPlayerPlacing()) {
+                    updateCellStyle(cell, 0); // Поле второго игрока пустое во время расстановки первого
+                } else if (gameController.isPvPMode() && !gameController.isFirstPlayerPlacing() && isPlacingShips) {
+                    updateCellStyle(cell, cellState); // Показываем корабли второго игрока во время его расстановки
+                } else {
+                    updateCellStyle(cell, cellState == 2 || cellState == 3 ? cellState : 0); // Скрываем корабли после расстановки
                 }
             }
         }
@@ -157,6 +161,18 @@ public class GameView implements IGameView {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    // "Скрываем" поле первого игрока (пустая сетка, кликабельно)
+    public void hidePlayer1Grid() {
+        setupGrid(player1Grid, new int[10][10], true);
+    }
+
+    // "Скрываем" оба поля после второго игрока (пустые сетки, кликабельно)
+    public void hidePlayer2Grid() {
+        setupGrid(player1Grid, new int[10][10], true);
+        setupGrid(player2Grid, new int[10][10], true);
+        isPlacingShips = false; // Завершаем стадию расстановки
     }
 
     private GridPane addCoordinates(GridPane grid, boolean isPlayer) {
@@ -186,6 +202,7 @@ public class GameView implements IGameView {
     }
 
     private void setupGrid(GridPane grid, int[][] board, boolean isClickable) {
+        grid.getChildren().clear(); // Очищаем старую сетку
         grid.setHgap(2);
         grid.setVgap(2);
         grid.setPadding(new Insets(5));
@@ -196,12 +213,12 @@ public class GameView implements IGameView {
                 cell.setMinSize(30, 30);
                 cell.setMaxSize(30, 30);
 
-                if (isClickable && !gameController.isPvPMode()) {
+                if (isClickable) {
                     final int x = i;
                     final int y = j;
                     cell.setOnAction(e -> {
-                        gameController.handlePlayerMove(x, y);
-                        updateCellStyle(cell, computer.getBoard().getGrid()[x][y]);
+                        gameController.handlePlayerMove(x, y); // Пока работает только для PvE
+                        updateGrid();
                     });
                 } else if (board[i][j] == 1) {
                     cell.setStyle("-fx-background-color: black; -fx-font-size: 12;");

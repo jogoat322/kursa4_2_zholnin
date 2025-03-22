@@ -6,19 +6,18 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
 public class GameController implements IGameController {
-    private Board player1Board; // Поле первого игрока
-    private Board player2Board; // Поле второго игрока (или компьютера в PvE)
+    private Board player1Board;
+    private Board player2Board;
     private Player player1;
-    private Player player2; // Для PvP
-    private Computer computer; // Для PvE
+    private Player player2;
+    private Computer computer;
     private GameView gameView;
-    private boolean isPlayerTurn = true; // Флаг для определения хода игрока (пока не используется в PvP)
-    private final int[] shipSizes = {4, 3, 3, 2, 2, 2, 1, 1, 1, 1}; // Размеры кораблей
-    private int currentShipIndex = 0; // Индекс текущего корабля для размещения
-    private boolean isPvPMode = false; // Флаг режима PvP
-    private boolean isFirstPlayerPlacing = true; // Флаг для определения, кто сейчас расставляет корабли
+    private boolean isPlayerTurn = true;
+    private final int[] shipSizes = {4, 3, 3, 2, 2, 2, 1, 1, 1, 1};
+    private int currentShipIndex = 0;
+    private boolean isPvPMode = false;
+    private boolean isFirstPlayerPlacing = true;
 
-    // Конструктор по умолчанию
     public GameController() {
     }
 
@@ -33,21 +32,21 @@ public class GameController implements IGameController {
             gameView = new GameView(primaryStage, player1, player2, this);
         } else {
             player2Board = new Board();
-            player2Board.placeShipsRandomly(); // Компьютер расставляет корабли
+            player2Board.placeShipsRandomly();
             player1 = new Player(player1Board, player2Board);
             computer = new Computer(player2Board, player1Board);
             gameView = new GameView(primaryStage, player1, computer, this);
         }
 
         gameView.initialize();
-        gameView.startShipPlacement(); // Начинаем расстановку кораблей
+        gameView.startShipPlacement();
     }
 
     public int getCurrentShipSize() {
         if (currentShipIndex < shipSizes.length) {
             return shipSizes[currentShipIndex];
         }
-        return -1; // Все корабли размещены
+        return -1;
     }
 
     public boolean placePlayerShip(int x, int y, boolean isVertical) {
@@ -63,16 +62,15 @@ public class GameController implements IGameController {
                 gameView.updateGrid();
                 if (currentShipIndex == shipSizes.length) {
                     if (isPvPMode && isFirstPlayerPlacing) {
-                        // Первый игрок закончил расстановку, переходим ко второму
                         isFirstPlayerPlacing = false;
-                        currentShipIndex = 0; // Сбрасываем для второго игрока
+                        currentShipIndex = 0;
+                        gameView.hidePlayer1Grid(); // "Скрываем" поле первого игрока
                         gameView.switchToSecondPlayerPlacement();
                     } else if (isPvPMode && !isFirstPlayerPlacing) {
-                        // Второй игрок закончил, пока не начинаем игру
-                        gameView.showMessage("Расстановка завершена", "Оба игрока разместили корабли.");
+                        gameView.hidePlayer2Grid(); // "Скрываем" оба поля после второго игрока
+                        gameView.showMessage("Расстановка завершена", "Оба поля готовы для игры.");
                     } else {
-                        // PvE-режим, начинаем игру
-                        gameView.startGame();
+                        gameView.startGame(); // PvE-режим
                     }
                 }
                 return true;
