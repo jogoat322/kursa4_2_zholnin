@@ -26,25 +26,21 @@ public class MainMenu implements IMainMenu {
         ImageView backgroundView = new ImageView(backgroundImage);
         backgroundView.setFitWidth(primaryStage.getWidth());
         backgroundView.setFitHeight(primaryStage.getHeight());
-        backgroundView.setPreserveRatio(false); // Растягиваем на весь экран
+        backgroundView.setPreserveRatio(false);
 
-        // Контейнер для кнопок
         VBox menuBox = new VBox(40);
         menuBox.setAlignment(javafx.geometry.Pos.CENTER);
 
-        // Кнопка "Играть против компьютера"
         Button playButtonPvE = new Button("Играть против компьютера");
         playButtonPvE.setMinSize(300, 80);
         playButtonPvE.setStyle("-fx-font-size: 24px; -fx-background-color: #4CAF50; -fx-text-fill: white;");
         playButtonPvE.setOnAction(e -> startGamePvE());
 
-        // Кнопка "Играть против игрока"
         Button playButtonPvP = new Button("Играть против игрока");
         playButtonPvP.setMinSize(300, 80);
         playButtonPvP.setStyle("-fx-font-size: 24px; -fx-background-color: #FF9800; -fx-text-fill: white;");
-        playButtonPvP.setOnAction(e -> showPvPModeMessage());
+        playButtonPvP.setOnAction(e -> startGamePvP());
 
-        // Кнопка "Выйти"
         Button exitButton = new Button("Выйти");
         exitButton.setMinSize(300, 80);
         exitButton.setStyle("-fx-font-size: 24px; -fx-background-color: #f44336; -fx-text-fill: white;");
@@ -52,7 +48,6 @@ public class MainMenu implements IMainMenu {
 
         menuBox.getChildren().addAll(playButtonPvE, playButtonPvP, exitButton);
 
-        // Используем StackPane, чтобы фон был позади кнопок
         StackPane root = new StackPane();
         root.getChildren().addAll(backgroundView, menuBox);
 
@@ -65,14 +60,11 @@ public class MainMenu implements IMainMenu {
 
     private void startGamePvE() {
         GameController gameController = new GameController();
-        gameController.startGame(primaryStage); // Запуск игры против компьютера
+        gameController.startGame(primaryStage, false);
     }
 
-    private void showPvPModeMessage() {
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("Режим в разработке");
-        alert.setHeaderText(null);
-        alert.setContentText("Режим 'Игрок против игрока' пока в разработке. Следите за обновлениями!");
-        alert.showAndWait();
+    private void startGamePvP() {
+        GameController gameController = new GameController();
+        gameController.startGame(primaryStage, true);
     }
 }
